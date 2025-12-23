@@ -1,3 +1,29 @@
+# Bỏ qua dữ liệu ảnh (Nặng, không cần thiết để chạy thử)
 train/
 test/
 valid/
+PlayingCards_Small/
+
+# Bỏ qua các file hệ thống và cache của Python
+__pycache__/
+*.pyc
+.DS_Store
+.vscode/
+.idea/
+venv/
+
+# Cấu hình cho thư mục runs (Kết quả training)
+# Bỏ qua các file logs và checkpoint không dùng đến
+runs/**/events*
+runs/**/weights/last.pt
+runs/**/weights/epoch*.pt
+runs/**/labels/
+runs/**/train_batch*.jpg
+runs/**/val_batch*.jpg
+runs/**/results.csv
+runs/**/results.png
+runs/**/confusion_matrix.png
+runs/**/F1_curve.png
+runs/**/P_curve.png
+runs/**/R_curve.png
+runs/**/PR_curve.png
