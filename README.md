@@ -99,7 +99,7 @@ Hình ảnh dưới đây minh họa kết quả nhận diện của mô hình t
 
 1.  **Sao chép Repository**
     ```bash
-    git clone <URL_CUA_REPOSITORY>
+    git clone <https://github.com/VuNam002/PlayingCards_Camera>
     cd PlayingCards_Camera
     ```
 
