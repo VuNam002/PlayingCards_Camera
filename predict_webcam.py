@@ -1,34 +1,47 @@
 import cv2
-import torch
-import numpy as np
+from ultralytics import YOLO
 import os
 
 # CẤU HÌNH: Đường dẫn đến file model best.pt
-# Lưu ý: Bạn phải copy file best.pt vào đúng vị trí này
-model_path = r'runs/detect/train/weights/best.pt'
+model_path = r'weights/runs/detect/train7/weights/best.pt'
 
+# Kiểm tra sự tồn tại của model
 if not os.path.exists(model_path):
-    print(f"❌ LỖI: Không tìm thấy file model tại: {model_path}")
-    print("👉 Vui lòng copy file 'best.pt' từ thư mục train cũ ra đường dẫn trên.")
+    print(f"LỖI: Không tìm thấy file model tại: {model_path}")
+    print("Vui lòng kiểm tra lại đường dẫn và đảm bảo file 'best.pt' tồn tại.")
     exit()
 
-# Load model từ source 'local' (thư mục yolov5 trong dự án)
+# Load mô hình YOLOv8
 print(f"Đang load model từ: {model_path}...")
-model = torch.hub.load('yolov5', 'custom', path=model_path, source='local')
+model = YOLO(model_path)
 
 # Mở Webcam
 cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print(" LỖI: Không thể mở webcam.")
+    exit()
+
 print("Đang mở webcam... Nhấn 'q' để thoát.")
 
-while cap.isOpened():
+while True:
     ret, frame = cap.read()
-    if not ret: break
+    if not ret:
+        print(" Kết thúc stream hoặc lỗi đọc frame.")
+        break
     
-    # Nhận diện và hiển thị
-    results = model(frame)
-    cv2.imshow('YOLOv5 Webcam Predict', np.squeeze(results.render()))
-    
-    if cv2.waitKey(10) & 0xFF == ord('q'): break
+    # Chạy nhận diện trên frame
+    results = model(frame, stream=True)
 
+    # Xử lý và hiển thị kết quả
+    for r in results:
+        annotated_frame = r.plot()
+        cv2.imshow("YOLOv8 Webcam Predict", annotated_frame)
+
+    # Nhấn 'q' để thoát
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Dọn dẹp
 cap.release()
 cv2.destroyAllWindows()
+print("Đã đóng webcam.")
