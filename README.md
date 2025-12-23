@@ -6,7 +6,6 @@ Dự án này sử dụng mô hình YOLOv8 để nhận diện các lá bài tro
 
 Dưới đây là hình ảnh minh họa kết quả nhận diện của ứng dụng trong thực tế. Hệ thống có khả năng xác định nhiều lá bài khác nhau trong một khung hình.
 
-*(Lưu ý: Đây là ảnh tĩnh từ quá trình huấn luyện, ứng dụng thực tế sẽ xử lý video từ webcam trong thời gian thực.)*
 
 ![Demo nhận diện lá bài](demo/Screenshot%202025-12-23%20200546.png)
 ![Demo nhận diện lá bài](demo/Screenshot%202025-12-23%20202050.png)
