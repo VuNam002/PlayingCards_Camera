@@ -83,7 +83,7 @@ Biểu đồ `labels.jpg` hiển thị các thống kê quan trọng về bộ d
 - **Phân bố lớp (Classes):** Số lượng mẫu (instances) cho mỗi loại lá bài, giúp nhận diện sự mất cân bằng giữa các lớp.
 - **Hộp bao (Bounding Boxes):** Phân bố về vị trí trung tâm (x, y) và kích thước (chiều rộng, chiều cao) của các lá bài trong ảnh, giúp hiểu rõ hơn về đặc điểm không gian của dữ liệu huấn luyện.
 
-[![Thống kê dữ liệu](demo/labels.jpg)]
+![Thống kê dữ liệu](demo/labels.jpg)
 
 ## Yêu cầu
 - Python 3.8 trở lên
