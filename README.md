@@ -10,6 +10,14 @@ Dưới đây là hình ảnh minh họa kết quả nhận diện của ứng d
 ![Demo nhận diện lá bài](demo/Screenshot%202025-12-23%20202050.png)
 ![Demo nhận diện lá bài](demo/Screenshot%202025-12-23%20202138.png)
 
+## Bộ Dữ liệu (Dataset)
+
+Dự án sử dụng bộ dữ liệu **Playing Cards** được cung cấp bởi Augmented Startups trên nền tảng Roboflow. Đây là bộ dữ liệu chất lượng cao được thiết kế chuyên biệt cho các bài toán nhận diện đối tượng.
+
+- **Link dữ liệu:** [Playing Cards - Roboflow Universe](https://universe.roboflow.com/augmented-startups/playing-cards-ow27d)
+- **Chi tiết:** Bộ dữ liệu bao gồm hình ảnh của 52 lá bài tây (Standard 52-card deck) cùng với Joker, được thu thập dưới nhiều điều kiện ánh sáng và góc độ khác nhau.
+- **Cấu trúc:** Dữ liệu đã được gán nhãn và chia thành các tập huấn luyện (train), kiểm thử (test) và xác thực (validation), sẵn sàng cho việc huấn luyện các mô hình như YOLOv8.
+
 ## Cơ sở Lý thuyết và Ứng dụng trong Mô hình YOLOv8
 
 Trong khi dự án sử dụng trực tiếp mô hình YOLOv8 đã được huấn luyện để thực hiện nhận diện, sức mạnh, tốc độ và sự hiệu quả của mô hình này không phải là ngẫu nhiên. Chúng bắt nguồn từ các nguyên lý tối ưu hóa toán học sâu sắc. Phần này sẽ đi sâu vào cơ sở lý thuyết đó, giải thích cách **Thuật toán Subgradient** được ứng dụng để giải quyết các bài toán như **Lasso** và **Phân cụm lồi**, qua đó tạo ra các mô hình học sâu nhỏ gọn và hiệu suất cao như YOLOv8.
@@ -48,12 +56,12 @@ Phương pháp lặp của thuật toán có dạng: `x_{k+1} = x_k - α_k * g_k
 Dưới đây là một số kết quả từ quá trình huấn luyện mô hình, cho thấy hiệu suất của mô hình nhận diện.
 
 ### 1. Ma trận nhầm lẫn (Confusion Matrix)
-Ma trận nhầm lẫn cho thấy độ chính xác của mô hình trên từng lớp (mỗi lá bài). Các giá trị trên đường chéo chính càng cao, mô hình càng chính xác.
+Ma trận nhầm lẫn (Confusion Matrix) giúp trực quan hóa hiệu suất của mô hình trên từng lớp đối tượng cụ thể. Trục tung thể hiện nhãn thực tế (True Label) và trục hoành thể hiện nhãn dự đoán (Predicted Label). Các ô màu đậm trên đường chéo chính biểu thị số lượng dự đoán chính xác cao cho từng lá bài. Sự nhầm lẫn giữa các lá bài (nếu có) sẽ hiển thị ở các ô ngoài đường chéo, giúp nhận diện các cặp lá bài dễ bị mô hình đoán sai.
 
 ![Ma trận nhầm lẫn](weights/runs/detect/train7/confusion_matrix_normalized.png)
 
 ### 2. Đường cong PR (Precision-Recall Curve)
-Đường cong PR thể hiện sự cân bằng giữa Precision (độ chính xác) và Recall (độ phủ) tại các ngưỡng tin cậy khác nhau. Một đường cong càng gần góc trên bên phải càng cho thấy hiệu suất tốt.
+Đường cong Precision-Recall (PR Curve) đánh giá sự đánh đổi giữa độ chính xác (Precision) và độ nhạy (Recall) của mô hình tại các ngưỡng confidence khác nhau. Diện tích dưới đường cong (mAP) càng lớn (đường cong tiến về góc trên bên phải) chứng tỏ mô hình có khả năng phát hiện đúng đối tượng cao mà không bị báo động giả (False Positives) hay bỏ sót đối tượng (False Negatives).
 
 ![Đường cong PR](weights/runs/detect/train7/BoxPR_curve.png)
 
