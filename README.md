@@ -15,8 +15,8 @@ Dưới đây là hình ảnh minh họa kết quả nhận diện của ứng d
 Dự án sử dụng bộ dữ liệu **Playing Cards** được cung cấp bởi Augmented Startups trên nền tảng Roboflow. Đây là bộ dữ liệu chất lượng cao được thiết kế chuyên biệt cho các bài toán nhận diện đối tượng.
 
 - **Link dữ liệu:** [Playing Cards - Roboflow Universe](https://universe.roboflow.com/augmented-startups/playing-cards-ow27d)
-- **Chi tiết:** Bộ dữ liệu bao gồm hình ảnh của 52 lá bài tây (Standard 52-card deck) cùng với Joker, được thu thập dưới nhiều điều kiện ánh sáng và góc độ khác nhau.
-- **Cấu trúc:** Dữ liệu đã được gán nhãn và chia thành các tập huấn luyện (train), kiểm thử (test) và xác thực (validation), sẵn sàng cho việc huấn luyện các mô hình như YOLOv8.
+- **Chi tiết:** Bộ dữ liệu bao gồm hình ảnh của 10100 lá bài tây  cùng với Joker, được thu thập dưới nhiều điều kiện ánh sáng và góc độ khác nhau.
+- **Cấu trúc:** Dữ liệu đã được gán nhãn và chia thành các tập huấn luyện (train), kiểm thử (test) và xác thực (validation), sẵn sàng cho việc huấn luyện các mô hình học sâu.
 
 ## Cơ sở Lý thuyết và Ứng dụng trong Mô hình YOLOv8
 
@@ -28,7 +28,15 @@ Thuật toán Subgradient là công cụ nền tảng để giải quyết các 
 
 Phương pháp lặp của thuật toán có dạng: `x_{k+1} = x_k - α_k * g_k`, nơi `g_k` là một subgradient của hàm mục tiêu. Ý tưởng này cho phép chúng ta tìm điểm tối ưu ngay cả khi không có đạo hàm rõ ràng.
 
-### 2. Lasso, Tối ưu hóa YOLOv8 và Thuật toán Subgradient
+### 2. Biến thể: Thuật toán Subgradient Ngẫu nhiên
+
+Trong thực tế huấn luyện các mô hình học sâu với lượng dữ liệu lớn, việc tính toán subgradient trên toàn bộ tập dữ liệu là rất tốn kém. **Thuật toán Subgradient Ngẫu nhiên** (Randomized Subgradient) được sử dụng để giải quyết vấn đề này.
+
+- **Cơ chế:** Tại mỗi bước lặp, thuật toán chọn ngẫu nhiên một mẫu dữ liệu (hoặc một mini-batch) để tính toán một ước lượng không chệch của subgradient.
+- **Công thức:** `x_{k+1} = x_k - α_k * g̃_k`, với `g̃_k` là subgradient ngẫu nhiên.
+- **Ứng dụng:** Đây chính là cơ sở của **Stochastic Gradient Descent (SGD)**, phương pháp tối ưu hóa cốt lõi giúp huấn luyện YOLOv8 hiệu quả trên bộ dữ liệu lớn như Playing Cards.
+
+### 3. Bài toán Lasso, Tối ưu hóa YOLOv8 và Thuật toán Subgradient
 
 **Liên kết trực tiếp đến dự án:** Tốc độ real-time của ứng dụng này phụ thuộc hoàn toàn vào sự nhỏ gọn và hiệu quả của mô hình `yolov8n.pt`. Một trong những kỹ thuật quan trọng để tạo ra các mô hình như vậy là **"model pruning"** (tỉa mô hình), và nguyên lý đằng sau nó chính là **Lasso (L1 Regularization)**.
 
@@ -39,7 +47,7 @@ Phương pháp lặp của thuật toán có dạng: `x_{k+1} = x_k - α_k * g_k
 
 **Kết luận:** Như vậy, có một mối liên hệ trực tiếp: **Thuật toán Subgradient** cho phép giải bài toán **Lasso**, và nguyên lý của Lasso được áp dụng trong các kỹ thuật **tỉa mô hình** để tạo ra các phiên bản YOLOv8 hiệu quả (`yolov8n.pt`) mà dự án này đang sử dụng.
 
-### 3. Phân cụm lồi và Phân tích Dữ liệu trong Học máy
+### 4. Phân cụm lồi và Phân tích Dữ liệu trong Học máy
 
 **Liên kết trực tiếp đến dự án:** Trước khi huấn luyện một mô hình nhận diện mạnh mẽ, việc hiểu rõ cấu trúc của bộ dữ liệu là cực kỳ quan trọng. Đây là giai đoạn "Phân tích Dữ liệu Khám phá" (Exploratory Data Analysis), và Phân cụm lồi là một công cụ mạnh mẽ cho việc này.
 
@@ -58,18 +66,24 @@ Dưới đây là một số kết quả từ quá trình huấn luyện mô hì
 ### 1. Ma trận nhầm lẫn (Confusion Matrix)
 Ma trận nhầm lẫn (Confusion Matrix) giúp trực quan hóa hiệu suất của mô hình trên từng lớp đối tượng cụ thể. Trục tung thể hiện nhãn thực tế (True Label) và trục hoành thể hiện nhãn dự đoán (Predicted Label). Các ô màu đậm trên đường chéo chính biểu thị số lượng dự đoán chính xác cao cho từng lá bài. Sự nhầm lẫn giữa các lá bài (nếu có) sẽ hiển thị ở các ô ngoài đường chéo, giúp nhận diện các cặp lá bài dễ bị mô hình đoán sai.
 
-![Ma trận nhầm lẫn](weights/runs/detect/train7/confusion_matrix_normalized.png)
+![Ma trận nhầm lẫn](demo/confusion_matrix_normalized.png)
 
 ### 2. Đường cong PR (Precision-Recall Curve)
 Đường cong Precision-Recall (PR Curve) đánh giá sự đánh đổi giữa độ chính xác (Precision) và độ nhạy (Recall) của mô hình tại các ngưỡng confidence khác nhau. Diện tích dưới đường cong (mAP) càng lớn (đường cong tiến về góc trên bên phải) chứng tỏ mô hình có khả năng phát hiện đúng đối tượng cao mà không bị báo động giả (False Positives) hay bỏ sót đối tượng (False Negatives).
 
-![Đường cong PR](weights/runs/detect/train7/BoxPR_curve.png)
+![Đường cong PR](demo/BoxPR_curve.png)
 
 ### 3. Kết quả nhận diện trên tập huấn luyện
 Hình ảnh dưới đây minh họa kết quả nhận diện của mô hình trên một lô (batch) dữ liệu huấn luyện. Các hộp bao và nhãn cho thấy mô hình đã học cách xác định vị trí và loại của các lá bài.
 
 ![Kết quả nhận diện](weights/runs/detect/train7/val_batch2_labels.jpg)
 
+### 4. Thống kê Dữ liệu (Labels)
+Biểu đồ `labels.jpg` hiển thị các thống kê quan trọng về bộ dữ liệu đã được gán nhãn:
+- **Phân bố lớp (Classes):** Số lượng mẫu (instances) cho mỗi loại lá bài, giúp nhận diện sự mất cân bằng giữa các lớp.
+- **Hộp bao (Bounding Boxes):** Phân bố về vị trí trung tâm (x, y) và kích thước (chiều rộng, chiều cao) của các lá bài trong ảnh, giúp hiểu rõ hơn về đặc điểm không gian của dữ liệu huấn luyện.
+
+!Thống kê dữ liệu
 
 ## Yêu cầu
 - Python 3.8 trở lên
