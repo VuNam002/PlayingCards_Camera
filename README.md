@@ -60,7 +60,7 @@ Ma trận nhầm lẫn cho thấy độ chính xác của mô hình trên từng
 ### 3. Kết quả nhận diện trên tập huấn luyện
 Hình ảnh dưới đây minh họa kết quả nhận diện của mô hình trên một lô (batch) dữ liệu huấn luyện. Các hộp bao và nhãn cho thấy mô hình đã học cách xác định vị trí và loại của các lá bài.
 
-![Kết quả nhận diện](weights/runs/detect/train5/train_batch0.jpg)
+![Kết quả nhận diện](weights/runs/detect/train7/val_batch2_labels.jpg)
 
 
 ## Yêu cầu
